@@ -34,6 +34,7 @@ _default_locale = "en_US"
 _translations = {}
 _supported_locales = frozenset([_default_locale])
 _use_gettext = False
+CONTEXT_SEPARATOR = "\x04"
 
 
 def get(*locale_codes):
@@ -135,6 +136,44 @@ class Locale(BabelCoreLocale):
             return self.translations.ungettext(message, plural_message, count)
         else:
             return self.translations.ugettext(message)
+
+    def pgettext(self, context, message, plural_message=None, count=None):
+        """Allows to set context for translation, accepts plural forms.
+
+        Usage example::
+
+            pgettext("law", "right")
+            pgettext("good", "right")
+
+        Plural message example::
+
+            pgettext("organization", "club", "clubs", len(clubs))
+            pgettext("stick", "club", "clubs", len(clubs))
+
+        To generate POT file with context, add following options to step 1
+        of `load_gettext_translations` sequence::
+
+            xgettext [basic options] --keyword=pgettext:1c,2 --keyword=pgettext:1c,2,3
+
+        .. versionadded:: 4.2
+        """
+        if plural_message is not None:
+            assert count is not None
+            msgs_with_ctxt = ("%s%s%s" % (context, CONTEXT_SEPARATOR, message),
+                          "%s%s%s" % (context, CONTEXT_SEPARATOR, plural_message),
+                          count)
+            result = self.ngettext(*msgs_with_ctxt)
+            if CONTEXT_SEPARATOR in result:
+                # Translation not found
+                result = self.ngettext(message, plural_message, count)
+            return result
+        else:
+            msg_with_ctxt = "%s%s%s" % (context, CONTEXT_SEPARATOR, message)
+            result = self.gettext(msg_with_ctxt)
+            if CONTEXT_SEPARATOR in result:
+                # Translation not found
+                result = message
+            return result
 
     def format_datetime(self, datetime=None, format='medium', tzinfo=None):
         """

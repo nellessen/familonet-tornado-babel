@@ -14,7 +14,7 @@ setup(
     packages = find_packages(),
 
     install_requires = [
-        "tornado",
+        "tornado>=4.3.0",
         "babel",
         "speaklater",
     ],

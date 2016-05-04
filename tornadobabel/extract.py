@@ -32,7 +32,16 @@ class DummyTemplate(object):
         else:
             self.autoescape = _DEFAULT_AUTOESCAPE
         self.namespace = loader.namespace if loader else {}
-        reader = _TemplateReader(name, escape.native_str(template_string))
+        if loader and loader.whitespace:
+            whitespace = loader.whitespace
+        else:
+            # Whitespace defaults by filename.
+            if str(name).endswith(".html") or str(name).endswith(".js"):
+                whitespace = "single"
+            else:
+                whitespace = "all"
+        reader = _TemplateReader(name, escape.native_str(template_string),
+                                 whitespace)
         self.file = _File(self, _parse(reader, self))
 
 
