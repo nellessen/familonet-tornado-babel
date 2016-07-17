@@ -10,7 +10,7 @@
 import sys
 sys.path.append('../')
 
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 from tornadobabel.extract import extract_tornado

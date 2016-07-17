@@ -66,7 +66,7 @@ def extract_from_node(expression, gettext_functions=None):
         gettext_functions = GETTEXT_FUNCTIONS
 
     for node in ast.walk(ast.parse(expression.expression)):
-        # Recursively walk through all descendant nodes 
+        # Recursively walk through all descendant nodes
         if isinstance(node, ast.Call):
             # If the type is a function call
             if not (
@@ -83,9 +83,9 @@ def extract_from_node(expression, gettext_functions=None):
 
             for arg in node.keywords:
                 strings.append(None)
-            if node.starargs is not None:
+            if hasattr(node, 'startags') and node.starargs:
                 strings.append(None)
-            if node.kwargs is not None:
+            if hasattr(node, 'kwargs') and node.kwargs:
                 strings.append(None)
 
             if len(strings) == 1:
@@ -110,14 +110,15 @@ def extract_tornado(fileobj, keywords, comment_tags, options):
     :return: an iterator over ``(lineno, funcname, message, comments)`` tuples
     :rtype: ``iterator``
     """
+    filename = fileobj.name if hasattr(fileobj, 'name') else options.get('name', '<string>')
     template = DummyTemplate(
         fileobj.read(),
-        file.name or options.get('name', '<string>'),
+        filename,
     )
 
     for node in walk(template.file):
         if isinstance(node, _Expression):
             for lineno, func, message in extract_from_node(node):
-                # TODO: Implement the comment feature, right now an empty 
+                # TODO: Implement the comment feature, right now an empty
                 # iterable is returned
                 yield lineno, func, message, []

@@ -71,7 +71,7 @@ class TornadoBabelMixin(object):
                     score = 1.0
                 locales.append((parts[0], score))
             if locales:
-                locales.sort(key=lambda (l, s): s, reverse=True)
+                locales.sort(key=lambda l, s: s, reverse=True)
                 codes = [l[0] for l in locales]
                 return locale.get(*codes)
         return locale.get(default)

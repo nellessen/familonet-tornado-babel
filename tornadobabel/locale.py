@@ -4,7 +4,7 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     The locale support of tornado as such is pretty basic and does not offer
-    support for merging translation catalogs and several other features most 
+    support for merging translation catalogs and several other features most
     multi language applications require.
 
     This module tries to retain the same API as that of tornado.locale while
@@ -19,7 +19,7 @@
 
     :changes:
         12/11/23 - E. PASCUAL (Centre Scientifique et Technique du Batiment):
-            fixed implementation of translations merge process in 
+            fixed implementation of translations merge process in
             load_gettext_translations
 """
 import gettext
@@ -61,7 +61,7 @@ def set_default_locale(code):
     global _default_locale
     global _supported_locales
     _default_locale = code
-    _supported_locales = frozenset(_translations.keys() + [_default_locale])
+    _supported_locales = frozenset(list(_translations.keys()) + [_default_locale])
 
 
 def load_gettext_translations(directory, domain):
@@ -80,11 +80,11 @@ def load_gettext_translations(directory, domain):
                 _translations[lang].merge(translation)
             else:
                 _translations[lang] = translation
-                
-        except Exception, e:
+
+        except Exception as e:
             logging.error("Cannot load translation for '%s': %s", lang, str(e))
             continue
-    _supported_locales = frozenset(_translations.keys() + [_default_locale])
+    _supported_locales = frozenset(list(_translations.keys()) + [_default_locale])
     _use_gettext = True
     logging.info("Supported locales: %s", sorted(_supported_locales))
 
