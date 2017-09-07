@@ -26,7 +26,7 @@ import gettext
 import logging
 import os
 
-from babel.support import Translations
+from babel.support import Translations, NullTranslations
 from babel.core import Locale as BabelCoreLocale
 from babel import dates, numbers
 
@@ -123,7 +123,7 @@ class Locale(BabelCoreLocale):
             cls._cache = {}
         if code not in cls._cache:
             assert code in _supported_locales
-            translations = _translations.get(code, gettext.NullTranslations())
+            translations = _translations.get(code, NullTranslations())
             locale = cls.parse(code)
             locale.translations = translations
             cls._cache[code] = locale
