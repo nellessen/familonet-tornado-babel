@@ -52,6 +52,7 @@ class TornadoBabelMixin(object):
         """
         return make_lazy_gettext(lambda: self.locale.translate)
 
+
     def get_browser_locale(self, default="en_US"):
         """Determines the user's locale from Accept-Language header.
 
@@ -71,7 +72,7 @@ class TornadoBabelMixin(object):
                     score = 1.0
                 locales.append((parts[0], score))
             if locales:
-                locales.sort(key=lambda l, s: s, reverse=True)
+                locales.sort(key=lambda l: l[1], reverse=True)
                 codes = [l[0] for l in locales]
                 return locale.get(*codes)
         return locale.get(default)
