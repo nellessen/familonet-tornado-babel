@@ -1,6 +1,6 @@
 Tornado-Babel
 =============
-**This is a fork of https://github.com/ermakoves/tornado-babel which is not used in production code but only to extract message catalogs from templates for translation.**
+**This is a fork of https://github.com/ermakoves/tornado-babel which is not used in production code but only to extract message catalogs from templates for translation. The fork adobts to Python 3 and latest Tornado releases.**
 
 .. image:: https://secure.travis-ci.org/openlabs/tornado-babel.png?branch=master
    :target: http://travis-ci.org/#!/openlabs/tornado-babel
